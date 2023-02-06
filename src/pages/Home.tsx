@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { setActiveCategory, setCurrentPage } from "../redux/slices/filterSlice";
 import { fetchPizza, Status } from "../redux/slices/pizzasSlice";
 import { RootState, useAppDispatch } from "../redux/store";
-import { useWhyDidYouUpdate } from "ahooks";
 
 type ItemsObj = {
   id: string;
@@ -86,9 +85,9 @@ export const Home = () => {
       <div className="content__top">
         <Categories
           activeCategory={activeCategory}
-          onChangeCategory={(id) => onChangeCategory(id)}
+          onChangeCategory={onChangeCategory}
         />
-        <Sort />
+        <Sort value={sort} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       {status === Status.ERROR ? (
@@ -97,7 +96,7 @@ export const Home = () => {
         </div>
       ) : (
         <div className="content__items">
-          {status === "isLoad"
+          {status === Status.LOADING
             ? [...new Array(8)].map((_, i) => <Skeleton key={i} />)
             : items
                 .filter((obj: ItemsObj) => {
