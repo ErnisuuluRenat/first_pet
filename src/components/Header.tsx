@@ -8,15 +8,19 @@ import React from "react";
 export const Header = () => {
   const location = useLocation();
   const { totalPrice, items } = useSelector(selectCart);
+  const isMounted = React.useRef(false);
+
   const totalAmount = items.reduce(
     (sum: number, item: any) => sum + item.count,
     0
   );
 
   React.useEffect(() => {
-    const json = JSON.stringify(items);
-    localStorage.setItem("cart", json);
-    console.log(json);
+    if (isMounted.current) {
+      const json = JSON.stringify(items);
+      localStorage.setItem("cart", json);
+    }
+    isMounted.current = true;
   }, [items]);
 
   return (
